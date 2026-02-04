@@ -1,0 +1,7 @@
+Advanced Elicitation - Analysis Context
+-------------------------------------
+Project: AI Native Horse Racing Platform
+Goal: Refine Core Vision and Executive Summary
+Key Problem: Fragmentation of data/video, legacy UX, passive tools
+Key Solution: Unified 'Homebase', Intelligence Layer (No Betting), Active AI Wingman
+Differentiator: Generational Product-Market Fit (Discord Gen vs Boomer Gen)

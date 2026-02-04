@@ -1,0 +1,7 @@
+Party Mode - Context
+-------------------------------------
+Project: AI Native Horse Racing Platform
+Core Vision: 'Strategic Intelligence Platform' (No Betting, just Intel)
+Challenge: Generational UX (Discord Gen) vs Boomer Legacy
+Key Feature: AI Wingman (Active Risk Management)
+Current Task: Validate Vision & UX
