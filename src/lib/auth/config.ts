@@ -54,8 +54,8 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id = token.id as string;
-        (session.user as any).ageVerified = token.ageVerified as boolean;
+        (session.user as Record<string, unknown>).id = token.id as string;
+        (session.user as Record<string, unknown>).ageVerified = token.ageVerified as boolean;
       }
       return session;
     },
