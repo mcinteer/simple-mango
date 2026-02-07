@@ -1,0 +1,59 @@
+# generated: 2026-02-07
+# project: simple-mango
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+generated: 2026-02-07
+project: simple-mango
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1
+  epic-1: in-progress
+  1-1-project-initialization-auth: ready-for-dev
+  1-2-puntingform-client-caching: backlog
+  1-3-dashboard-meeting-list: backlog
+  1-4-race-card-detail-view: backlog
+  1-5-real-time-odds-polling: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2
+  epic-2: backlog
+  2-1-wingman-chat-interface: backlog
+  2-2-racing-context-rag-pipeline: backlog
+  2-3-risk-assessment-skill: backlog
+  2-4-skeptical-mode-toggle: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3
+  epic-3: backlog
+  3-1-bet-logging-schema-form: backlog
+  3-2-the-vault-bankroll-ui: backlog
+  3-3-result-reconciliation-logic: backlog
+  3-4-money-saved-calculation: backlog
+  epic-3-retrospective: optional
