@@ -1,6 +1,6 @@
 # Story 1.1: Project Initialization & Auth
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -21,69 +21,69 @@ so that I can access the racing dashboard legally and securely.
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Project Initialization** (AC: #1, #2)
-  - [ ] Run `npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"`
-  - [ ] Run `npm install ai mongodb next-auth zustand`
-  - [ ] Create `.env.example` with all required env var keys (see Dev Notes)
-  - [ ] Verify `.env.local` already exists with real credentials
-  - [ ] Verify `npm run dev` starts without errors
+- [x] **Task 1: Project Initialization** (AC: #1, #2)
+  - [x] Run `npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"`
+  - [x] Run `npm install ai mongodb next-auth zustand`
+  - [x] Create `.env.example` with all required env var keys (see Dev Notes)
+  - [x] Verify `.env.local` already exists with real credentials
+  - [x] Verify `npm run dev` starts without errors
 
-- [ ] **Task 2: MongoDB Connection Singleton** (AC: #5)
-  - [ ] Create `/src/lib/db/client.ts` — MongoDB native driver connection singleton
-  - [ ] Use global cache pattern to prevent multiple connections in dev (hot reload)
-  - [ ] Read `MONGODB_URI` from `process.env`
-  - [ ] Export `getDb()` helper returning the database instance
+- [x] **Task 2: MongoDB Connection Singleton** (AC: #5)
+  - [x] Create `/src/lib/db/client.ts` — MongoDB native driver connection singleton
+  - [x] Use global cache pattern to prevent multiple connections in dev (hot reload)
+  - [x] Read `MONGODB_URI` from `process.env`
+  - [x] Export `getDb()` helper returning the database instance
 
-- [ ] **Task 3: NextAuth.js Configuration** (AC: #3, #5, #6, #7)
-  - [ ] Create `/src/lib/auth/config.ts` — NextAuth configuration
-  - [ ] Create `/src/lib/auth/providers.ts` — Google OAuth + Credentials provider
-  - [ ] Create `/src/app/api/auth/[...nextauth]/route.ts` — NextAuth API handler
-  - [ ] Configure JWT session strategy (stateless, Vercel-friendly)
-  - [ ] Credentials provider: validate email/password, check `users` collection
-  - [ ] Google provider: use `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`
-  - [ ] On sign-up, store user in `users` collection with `{ email, name, ageVerified: true, createdAt }`
-  - [ ] Hash passwords with bcrypt (add `bcryptjs` dependency)
+- [x] **Task 3: NextAuth.js Configuration** (AC: #3, #5, #6, #7)
+  - [x] Create `/src/lib/auth/config.ts` — NextAuth configuration
+  - [x] Create `/src/lib/auth/providers.ts` — Google OAuth + Credentials provider
+  - [x] Create `/src/app/api/auth/[...nextauth]/route.ts` — NextAuth API handler
+  - [x] Configure JWT session strategy (stateless, Vercel-friendly)
+  - [x] Credentials provider: validate email/password, check `users` collection
+  - [x] Google provider: use `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`
+  - [x] On sign-up, store user in `users` collection with `{ email, name, ageVerified: true, createdAt }`
+  - [x] Hash passwords with bcrypt (add `bcryptjs` dependency)
 
-- [ ] **Task 4: Auth Middleware** (AC: #7)
-  - [ ] Create `/src/middleware.ts` — protect all `/(auth)/*` routes
-  - [ ] Redirect unauthenticated users to `/login`
-  - [ ] Allow public access to `/`, `/login`, `/register`, `/api/auth/*`
+- [x] **Task 4: Auth Middleware** (AC: #7)
+  - [x] Create `/src/middleware.ts` — protect all `/(auth)/*` routes
+  - [x] Redirect unauthenticated users to `/login`
+  - [x] Allow public access to `/`, `/login`, `/register`, `/api/auth/*`
 
-- [ ] **Task 5: Registration Page + Age Gate** (AC: #3, #4, #5)
-  - [ ] Create `/src/app/register/page.tsx`
-  - [ ] Create `/src/components/features/auth/register-form.tsx`
-  - [ ] Create `/src/components/features/auth/age-gate.tsx` — checkbox component
-  - [ ] Form fields: name, email, password, confirm password, age-gate checkbox
-  - [ ] Client-side validation: all fields required, password match, checkbox checked
-  - [ ] On submit: call registration API, then `signIn('credentials')` and redirect to `/dashboard`
+- [x] **Task 5: Registration Page + Age Gate** (AC: #3, #4, #5)
+  - [x] Create `/src/app/register/page.tsx`
+  - [x] Create `/src/components/features/auth/register-form.tsx`
+  - [x] Create `/src/components/features/auth/age-gate.tsx` — checkbox component
+  - [x] Form fields: name, email, password, confirm password, age-gate checkbox
+  - [x] Client-side validation: all fields required, password match, checkbox checked
+  - [x] On submit: call registration API, then `signIn('credentials')` and redirect to `/dashboard`
 
-- [ ] **Task 6: Login Page** (AC: #6)
-  - [ ] Create `/src/app/login/page.tsx`
-  - [ ] Create `/src/components/features/auth/login-form.tsx`
-  - [ ] Email/Password form + "Sign in with Google" button
-  - [ ] On success: redirect to `/dashboard`
+- [x] **Task 6: Login Page** (AC: #6)
+  - [x] Create `/src/app/login/page.tsx`
+  - [x] Create `/src/components/features/auth/login-form.tsx`
+  - [x] Email/Password form + "Sign in with Google" button
+  - [x] On success: redirect to `/dashboard`
 
-- [ ] **Task 7: Registration API Route** (AC: #5)
-  - [ ] Create `/src/app/api/auth/register/route.ts` — POST handler
-  - [ ] Validate input (email format, password length >= 8, ageVerified === true)
-  - [ ] Check for existing user by email
-  - [ ] Hash password, insert into `users` collection
-  - [ ] Return `{ data: { id, email } }` on success
-  - [ ] Return `{ error: { code: "CONFLICT", message: "..." } }` if email exists
+- [x] **Task 7: Registration API Route** (AC: #5)
+  - [x] Create `/src/app/api/auth/register/route.ts` — POST handler
+  - [x] Validate input (email format, password length >= 8, ageVerified === true)
+  - [x] Check for existing user by email
+  - [x] Hash password, insert into `users` collection
+  - [x] Return `{ data: { id, email } }` on success
+  - [x] Return `{ error: { code: "CONFLICT", message: "..." } }` if email exists
 
-- [ ] **Task 8: Tuxedo Theme + Layout** (AC: #8)
-  - [ ] Update `tailwind.config.ts` — extend colors: `gold: '#D4AF37'`, `obsidian: '#0B1215'`, dark palette
-  - [ ] Update `/src/app/globals.css` — dark background, gold accent text
-  - [ ] Create `/src/app/layout.tsx` — root layout with dark theme, font, auth session provider
-  - [ ] Create `/src/app/(auth)/layout.tsx` — protected layout (nav placeholder, content area)
-  - [ ] Create `/src/app/(auth)/dashboard/page.tsx` — placeholder: "Welcome, {user.name}!"
-  - [ ] Create `/src/app/page.tsx` — landing page with links to `/login` and `/register`
+- [x] **Task 8: Tuxedo Theme + Layout** (AC: #8)
+  - [x] Update `tailwind.config.ts` — extend colors: `gold: '#D4AF37'`, `obsidian: '#0B1215'`, dark palette
+  - [x] Update `/src/app/globals.css` — dark background, gold accent text
+  - [x] Create `/src/app/layout.tsx` — root layout with dark theme, font, auth session provider
+  - [x] Create `/src/app/(auth)/layout.tsx` — protected layout (nav placeholder, content area)
+  - [x] Create `/src/app/(auth)/dashboard/page.tsx` — placeholder: "Welcome, {user.name}!"
+  - [x] Create `/src/app/page.tsx` — landing page with links to `/login` and `/register`
 
-- [ ] **Task 9: Basic UI Primitives** (AC: #3, #6)
-  - [ ] Create `/src/components/ui/button.tsx` — styled button (gold accent, dark bg variants)
-  - [ ] Create `/src/components/ui/input.tsx` — styled text input (dark theme)
-  - [ ] Create `/src/components/ui/card.tsx` — container card component
-  - [ ] Create `/src/components/ui/index.ts` — barrel export
+- [x] **Task 9: Basic UI Primitives** (AC: #3, #6)
+  - [x] Create `/src/components/ui/button.tsx` — styled button (gold accent, dark bg variants)
+  - [x] Create `/src/components/ui/input.tsx` — styled text input (dark theme)
+  - [x] Create `/src/components/ui/card.tsx` — container card component
+  - [x] Create `/src/components/ui/index.ts` — barrel export
 
 ## Dev Notes
 
@@ -283,9 +283,53 @@ export type ApiResponse<T> = ApiSuccess<T> | ApiError;
 ## Dev Agent Record
 
 ### Agent Model Used
+Claude (Anthropic) via pi coding agent
 
 ### Debug Log References
+- Next.js 16 uses Tailwind v4 with CSS-based `@theme` config instead of `tailwind.config.ts` — colors defined in `globals.css`
+- Next.js 16 deprecated `export { default } from "next-auth/middleware"` pattern — rewrote middleware with explicit `getToken` + `NextResponse.redirect`
+- Added `bcryptjs` + `@types/bcryptjs` as additional dependency for password hashing (noted in story Dev Notes)
 
 ### Completion Notes List
+- All 9 tasks implemented and verified via `npm run build` (clean) and `npm run lint` (clean)
+- Story Dev Notes specify manual testing acceptable for this story; test infrastructure comes in later stories
+- Tailwind config adapted for v4 (CSS `@theme` block) since Next.js 16 ships Tailwind v4
+- Google OAuth upserts user with `ageVerified: false` — age verification for OAuth users to be handled in future story
+- Middleware warning about deprecated convention is cosmetic; functionality works correctly
+
+### Review Follow-ups (AI)
+- [x] [AI-Review][Critical] Missing age verification check in `middleware.ts` (redirects unverified users to home)
+- [x] [AI-Review][Critical] Missing `ageVerified` in session/JWT to support middleware check
+- [x] [AI-Review][Medium] Email case sensitivity handling in registration and login
+- [x] [AI-Review][Low] Env var safety check in `db/client.ts`
+
+### Change Log
+- 2026-02-07: Implemented all 9 tasks — project init, MongoDB singleton, NextAuth config, middleware, registration, login, API routes, Tuxedo theme, UI primitives
+- 2026-02-07: Code Review Fixes - Implemented email normalization, robust env checking, and age verification enforcement in middleware.
 
 ### File List
+- .env.example
+- src/app/globals.css
+- src/app/layout.tsx
+- src/app/page.tsx
+- src/app/login/page.tsx
+- src/app/register/page.tsx
+- src/app/(auth)/layout.tsx
+- src/app/(auth)/dashboard/page.tsx
+- src/app/api/auth/[...nextauth]/route.ts
+- src/app/api/auth/register/route.ts
+- src/components/features/auth/age-gate.tsx
+- src/components/features/auth/register-form.tsx
+- src/components/features/auth/login-form.tsx
+- src/components/features/auth/index.ts
+- src/components/providers/session-provider.tsx
+- src/components/ui/button.tsx
+- src/components/ui/input.tsx
+- src/components/ui/card.tsx
+- src/components/ui/index.ts
+- src/lib/auth/config.ts
+- src/lib/auth/providers.ts
+- src/lib/db/client.ts
+- src/middleware.ts
+- src/types/api.ts
+- src/types/user.ts
