@@ -1,6 +1,6 @@
 # Story 1.2: Puntingform Client & Caching
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -20,41 +20,41 @@ so that the dashboard loads fast and we don't exceed API rate limits.
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Puntingform Types** (AC: #3)
-  - [ ] Create `/src/types/race.ts` — TypeScript types for Puntingform API responses and internal race data
-  - [ ] Define: `Meeting`, `Race`, `Runner` types matching Puntingform data shape
-  - [ ] Define: `CachedMeetings` type with `fetchedAt: string` (ISO 8601) and `data: Meeting[]`
+- [x] **Task 1: Puntingform Types** (AC: #3)
+  - [x] Create `/src/types/race.ts` — TypeScript types for Puntingform API responses and internal race data
+  - [x] Define: `Meeting`, `Race`, `Runner` types matching Puntingform data shape
+  - [x] Define: `CachedMeetings` type with `fetchedAt: string` (ISO 8601) and `data: Meeting[]`
 
-- [ ] **Task 2: Puntingform API Client** (AC: #3, #7)
-  - [ ] Create `/src/lib/puntingform/client.ts` — API wrapper class/functions
-  - [ ] Read `PUNTINGFORM_API_KEY` and `PUNTINGFORM_BASE_URL` from `process.env`
-  - [ ] Throw on missing env vars at init
-  - [ ] Implement `fetchMeetingsList()` — calls Puntingform `/meetingslist` endpoint (or validated equivalent)
-  - [ ] Include proper headers: `Authorization` or API key header per Puntingform docs
-  - [ ] Handle HTTP errors (non-2xx) by throwing typed errors
-  - [ ] Create `/src/lib/puntingform/types.ts` — raw API response types (if different from internal types)
+- [x] **Task 2: Puntingform API Client** (AC: #3, #7)
+  - [x] Create `/src/lib/puntingform/client.ts` — API wrapper class/functions
+  - [x] Read `PUNTINGFORM_API_KEY` and `PUNTINGFORM_BASE_URL` from `process.env`
+  - [x] Throw on missing env vars at init
+  - [x] Implement `fetchMeetingsList()` — calls Puntingform `/meetingslist` endpoint (or validated equivalent)
+  - [x] Include proper headers: `Authorization` or API key header per Puntingform docs
+  - [x] Handle HTTP errors (non-2xx) by throwing typed errors
+  - [x] Create `/src/lib/puntingform/types.ts` — raw API response types (if different from internal types)
 
-- [ ] **Task 3: MongoDB Caching Layer** (AC: #1, #2, #4)
-  - [ ] Create `/src/lib/puntingform/cache.ts` — caching logic using MongoDB
-  - [ ] Create `/src/lib/db/racing-context.ts` — MongoDB operations for `racingContext` collection
-  - [ ] Implement `getCachedMeetings(date: string)` — query by date, check `fetchedAt` TTL (1 hour)
-  - [ ] Implement `saveMeetingsCache(date: string, data: Meeting[])` — upsert with `fetchedAt` timestamp
-  - [ ] Use `racingContext` collection (per architecture)
-  - [ ] Cache key: today's date string (ISO 8601 date portion, e.g. `2026-02-07`)
-  - [ ] TTL check: `Date.now() - Date.parse(fetchedAt) < 3600000` (1 hour in ms)
+- [x] **Task 3: MongoDB Caching Layer** (AC: #1, #2, #4)
+  - [x] Create `/src/lib/puntingform/cache.ts` — caching logic using MongoDB
+  - [x] Create `/src/lib/db/racing-context.ts` — MongoDB operations for `racingContext` collection
+  - [x] Implement `getCachedMeetings(date: string)` — query by date, check `fetchedAt` TTL (1 hour)
+  - [x] Implement `saveMeetingsCache(date: string, data: Meeting[])` — upsert with `fetchedAt` timestamp
+  - [x] Use `racingContext` collection (per architecture)
+  - [x] Cache key: today's date string (ISO 8601 date portion, e.g. `2026-02-07`)
+  - [x] TTL check: `Date.now() - Date.parse(fetchedAt) < 3600000` (1 hour in ms)
 
-- [ ] **Task 4: Race Cards API Route** (AC: #1, #2, #3, #4, #5, #6)
-  - [ ] Create `/src/app/api/race-cards/route.ts` — GET handler
-  - [ ] Auth check: return 401 if no valid session (use `getServerSession`)
-  - [ ] Logic flow: check cache → if valid return cached → else fetch from Puntingform → save cache → return
-  - [ ] On Puntingform failure + stale cache: return stale data with `meta: { stale: true }`
-  - [ ] On Puntingform failure + no cache: return `{ error: { code: "UPSTREAM_ERROR", message } }` with 502
-  - [ ] Success response: `{ data: Meeting[], meta: { cached: boolean, fetchedAt: string } }`
+- [x] **Task 4: Race Cards API Route** (AC: #1, #2, #3, #4, #5, #6)
+  - [x] Create `/src/app/api/race-cards/route.ts` — GET handler
+  - [x] Auth check: return 401 if no valid session (use `getServerSession`)
+  - [x] Logic flow: check cache → if valid return cached → else fetch from Puntingform → save cache → return
+  - [x] On Puntingform failure + stale cache: return stale data with `meta: { stale: true }`
+  - [x] On Puntingform failure + no cache: return `{ error: { code: "UPSTREAM_ERROR", message } }` with 502
+  - [x] Success response: `{ data: Meeting[], meta: { cached: boolean, fetchedAt: string } }`
 
-- [ ] **Task 5: Error Utilities** (AC: #4, #5)
-  - [ ] Create `/src/lib/utils/errors.ts` — error handling utilities
-  - [ ] Implement `createErrorResponse(code, message, status)` helper
-  - [ ] Implement `createSuccessResponse(data, meta?)` helper
+- [x] **Task 5: Error Utilities** (AC: #4, #5)
+  - [x] Create `/src/lib/utils/errors.ts` — error handling utilities
+  - [x] Implement `createErrorResponse(code, message, status)` helper
+  - [x] Implement `createSuccessResponse(data, meta?)` helper
 
 ## Dev Notes
 
@@ -156,9 +156,28 @@ src/
 ## Dev Agent Record
 
 ### Agent Model Used
+Claude (Anthropic) via pi
 
 ### Debug Log References
+None — clean implementation, no issues.
 
 ### Completion Notes List
+- Task 1: Created `src/types/race.ts` with `Meeting`, `Race`, `Runner`, `CachedMeetings` types. All PascalCase, camelCase fields, ISO 8601 dates.
+- Task 5: Created `src/lib/utils/errors.ts` with `createErrorResponse` and `createSuccessResponse` helpers using `NextResponse.json`. Reuses `ApiError`/`ApiSuccess` from `types/api.ts`.
+- Task 2: Created `src/lib/puntingform/client.ts` with `fetchMeetingsList()`. Reads env vars, throws on missing `PUNTINGFORM_API_KEY`. Bearer auth header. Custom `PuntingformApiError` class for HTTP errors. Also created `src/lib/puntingform/types.ts` for raw API response types.
+- Task 3: Created `src/lib/db/racing-context.ts` with `getCachedMeetings(date)` and `saveMeetingsCache(date, data)`. Uses `racingContext` collection via `getDb()`. TTL check: 1 hour (3600000ms). Returns stale flag for graceful degradation. Created `src/lib/puntingform/cache.ts` orchestrating cache-first strategy: fresh cache → API fetch + save → stale fallback → throw.
+- Task 4: Created `src/app/api/race-cards/route.ts` GET handler. Auth via `getServerSession(authOptions)` → 401. Uses `getMeetingsWithCache(date)`. Returns standardised `{ data, meta }` on success, `{ error: { code: "UPSTREAM_ERROR" } }` with 502 on failure. Stale data returned with `meta.stale: true`.
+- All TypeScript compiles cleanly (`tsc --noEmit` passes).
+- No test framework configured; manual testing per Story 1.1 precedent.
+
+### Change Log
+- 2026-02-07: Implemented all 5 tasks for Story 1.2 — Puntingform client, MongoDB caching layer, race-cards API route, error utilities, and type definitions.
 
 ### File List
+- `src/types/race.ts` (NEW)
+- `src/lib/puntingform/types.ts` (NEW)
+- `src/lib/puntingform/client.ts` (NEW)
+- `src/lib/puntingform/cache.ts` (NEW)
+- `src/lib/db/racing-context.ts` (NEW)
+- `src/lib/utils/errors.ts` (NEW)
+- `src/app/api/race-cards/route.ts` (NEW)
