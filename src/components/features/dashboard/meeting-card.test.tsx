@@ -78,8 +78,8 @@ describe("MeetingCard", () => {
     render(<MeetingCard meeting={emptyMeeting} />);
 
     expect(screen.getByText("Flemington")).toBeInTheDocument();
-    // Should show "No races" or similar instead of time
-    expect(screen.getByText(/no races|tba/i)).toBeInTheDocument();
+    // Should show TBA instead of a time
+    expect(screen.getByText("TBA")).toBeInTheDocument();
   });
 
   it("applies dark mode styling with appropriate classes", () => {

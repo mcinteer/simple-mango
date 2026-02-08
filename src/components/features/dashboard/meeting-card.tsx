@@ -20,13 +20,12 @@ function formatStartTime(isoString: string): string {
 }
 
 /**
- * Get the start time of the first race, or "TBA" if no races.
+ * Get the start time of the first race, or null if no races loaded.
  */
-function getFirstRaceTime(meeting: Meeting): string {
+function getFirstRaceTime(meeting: Meeting): string | null {
   if (!meeting.races || meeting.races.length === 0) {
-    return "No races";
+    return null;
   }
-  // Sort by race number to ensure we get the first race
   const sortedRaces = [...meeting.races].sort((a, b) => a.raceNumber - b.raceNumber);
   return formatStartTime(sortedRaces[0].raceTime);
 }
@@ -49,8 +48,14 @@ export function MeetingCard({ meeting, onClick }: MeetingCardProps) {
           <p className="text-sm text-zinc-400">{meeting.raceType}</p>
         </div>
         <div className="text-right">
-          <p className="text-lg font-mono text-amber-500">{firstRaceTime}</p>
-          <p className="text-xs text-zinc-500">{meeting.races?.length ?? 0} races</p>
+          {firstRaceTime ? (
+            <>
+              <p className="text-lg font-mono text-amber-500">{firstRaceTime}</p>
+              <p className="text-xs text-zinc-500">{meeting.races.length} races</p>
+            </>
+          ) : (
+            <p className="text-sm text-zinc-500">TBA</p>
+          )}
         </div>
       </div>
     </button>
