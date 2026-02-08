@@ -1,7 +1,7 @@
 import type { Meeting } from "@/types/race";
 import type {
+  PuntingformApiResponse,
   PuntingformMeetingListItem,
-  PuntingformMeetingDetail,
 } from "./types";
 
 const DEFAULT_BASE_URL = "https://api.puntingform.com.au";
@@ -19,15 +19,16 @@ function getConfig() {
   return { apiKey, baseUrl };
 }
 
-async function apiFetch<T>(path: string): Promise<T> {
+async function apiFetch<T>(path: string, params: Record<string, string> = {}): Promise<T> {
   const { apiKey, baseUrl } = getConfig();
-  const url = `${baseUrl}${path}`;
+  const url = new URL(path, baseUrl);
+  url.searchParams.set("apiKey", apiKey);
+  for (const [k, v] of Object.entries(params)) {
+    url.searchParams.set(k, v);
+  }
 
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      Accept: "application/json",
-    },
+  const res = await fetch(url.toString(), {
+    headers: { Accept: "application/json" },
   });
 
   if (!res.ok) {
@@ -37,53 +38,38 @@ async function apiFetch<T>(path: string): Promise<T> {
     );
   }
 
-  return res.json() as Promise<T>;
+  const body = (await res.json()) as PuntingformApiResponse<T>;
+
+  if (body.statusCode !== 200) {
+    throw new PuntingformApiError(
+      body.error || `Puntingform API error: status ${body.statusCode}`,
+      body.statusCode
+    );
+  }
+
+  return body.payLoad;
 }
 
 /**
  * Fetch today's meetings list from Puntingform.
  */
-export async function fetchMeetingsList(): Promise<Meeting[]> {
-  const items = await apiFetch<PuntingformMeetingListItem[]>("/meetingslist");
+export async function fetchMeetingsList(date?: string): Promise<Meeting[]> {
+  const meetingDate = date || new Date().toISOString().split("T")[0];
 
-  // For each meeting, fetch full detail with races/runners
-  const meetings: Meeting[] = await Promise.all(
-    items.map(async (item) => {
-      const detail = await apiFetch<PuntingformMeetingDetail>(
-        `/v2/form/results?meetingId=${item.meetingId}`
-      );
-      return {
-        meetingId: detail.meetingId,
-        meetingName: detail.meetingName,
-        location: detail.location,
-        meetingDate: detail.meetingDate,
-        raceType: detail.raceType,
-        races: detail.races.map((r) => ({
-          raceId: r.raceId,
-          raceNumber: r.raceNumber,
-          raceName: r.raceName,
-          raceTime: r.raceTime,
-          distance: r.distance,
-          raceType: r.raceType,
-          trackCondition: r.trackCondition,
-          runners: r.runners.map((run) => ({
-            runnerId: run.runnerId,
-            runnerName: run.runnerName,
-            barrier: run.barrier,
-            jockey: run.jockey,
-            trainer: run.trainer,
-            weight: run.weight,
-            fixedOdds: run.fixedOdds,
-            flucs: run.flucs,
-            form: run.form,
-            silkUrl: run.silkUrl,
-          })),
-        })),
-      };
-    })
+  const items = await apiFetch<PuntingformMeetingListItem[]>(
+    "/v2/form/meetingslist",
+    { meetingDate }
   );
 
-  return meetings;
+  // Map raw API shape to internal Meeting type (without race detail for now)
+  return items.map((item) => ({
+    meetingId: item.meetingId,
+    meetingName: item.track.name,
+    location: `${item.track.state}, ${item.track.country}`,
+    meetingDate: item.meetingDate,
+    raceType: item.track.location,
+    races: [],
+  }));
 }
 
 export class PuntingformApiError extends Error {

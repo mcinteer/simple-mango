@@ -1,14 +1,38 @@
 /**
- * Raw Puntingform API response types.
- * These map to the external API shape before transformation to internal types.
+ * Raw Puntingform API response types — matched to actual API shape.
  */
+
+export interface PuntingformApiResponse<T> {
+  statusCode: number;
+  status: number;
+  error: string | null;
+  errors: unknown;
+  payLoad: T;
+  processTime: number;
+  timeStamp: string;
+}
+
+export interface PuntingformTrack {
+  name: string;
+  trackId: string;
+  location: string;
+  state: string;
+  country: string;
+  abbrev: string;
+  surface: string | null;
+}
 
 export interface PuntingformMeetingListItem {
   meetingId: string;
-  meetingName: string;
-  location: string;
+  track: PuntingformTrack;
   meetingDate: string;
-  raceType: string;
+  tabMeeting: boolean;
+  railPosition: string;
+  stage: string;
+  isBarrierTrial: boolean;
+  isJumps: boolean;
+  formUpdated: string | null;
+  resultsUpdated: string | null;
 }
 
 export interface PuntingformRunner {
@@ -37,9 +61,7 @@ export interface PuntingformRace {
 
 export interface PuntingformMeetingDetail {
   meetingId: string;
-  meetingName: string;
-  location: string;
+  track: PuntingformTrack;
   meetingDate: string;
-  raceType: string;
   races: PuntingformRace[];
 }

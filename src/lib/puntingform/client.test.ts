@@ -6,6 +6,18 @@ const MOCK_ENV = {
   PUNTINGFORM_BASE_URL: "https://api.test.com",
 };
 
+function mockApiResponse<T>(payLoad: T) {
+  return {
+    statusCode: 200,
+    status: 0,
+    error: null,
+    errors: null,
+    payLoad,
+    processTime: 25,
+    timeStamp: "2026-02-08T12:00:00Z",
+  };
+}
+
 describe("Puntingform client", () => {
   const originalEnv = process.env;
 
@@ -26,26 +38,24 @@ describe("Puntingform client", () => {
     );
   });
 
-  it("sends Bearer auth header", async () => {
+  it("sends apiKey as query param, not auth header", async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve([]),
+      json: () => Promise.resolve(mockApiResponse([])),
     });
     vi.stubGlobal("fetch", mockFetch);
 
-    await fetchMeetingsList();
+    await fetchMeetingsList("2026-02-08");
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://api.test.com/meetingslist",
-      expect.objectContaining({
-        headers: expect.objectContaining({
-          Authorization: "Bearer test-key-123",
-        }),
-      })
-    );
+    const calledUrl = new URL(mockFetch.mock.calls[0][0]);
+    expect(calledUrl.searchParams.get("apiKey")).toBe("test-key-123");
+    expect(calledUrl.searchParams.get("meetingDate")).toBe("2026-02-08");
+    // No Authorization header
+    const headers = mockFetch.mock.calls[0][1]?.headers;
+    expect(headers).not.toHaveProperty("Authorization");
   });
 
-  it("throws PuntingformApiError on non-2xx response", async () => {
+  it("throws PuntingformApiError on non-2xx HTTP response", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -58,47 +68,65 @@ describe("Puntingform client", () => {
     await expect(fetchMeetingsList()).rejects.toThrow(PuntingformApiError);
   });
 
-  it("fetches meeting details for each meeting in list", async () => {
-    const mockFetch = vi
-      .fn()
-      // First call: meetings list
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve([
-            { meetingId: "m1", meetingName: "Randwick", location: "Sydney", meetingDate: "2026-02-07", raceType: "R" },
-          ]),
-      })
-      // Second call: meeting detail
-      .mockResolvedValueOnce({
+  it("throws PuntingformApiError when API returns non-200 statusCode in body", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
         ok: true,
         json: () =>
           Promise.resolve({
-            meetingId: "m1",
-            meetingName: "Randwick",
-            location: "Sydney",
-            meetingDate: "2026-02-07",
-            raceType: "R",
-            races: [],
+            statusCode: 401,
+            status: 3,
+            error: "The API Key or Access Token is missing or invalid.",
+            payLoad: null,
           }),
-      });
-
-    vi.stubGlobal("fetch", mockFetch);
-
-    const result = await fetchMeetingsList();
-
-    expect(mockFetch).toHaveBeenCalledTimes(2);
-    expect(mockFetch).toHaveBeenLastCalledWith(
-      "https://api.test.com/v2/form/results?meetingId=m1",
-      expect.anything()
+      })
     );
+
+    await expect(fetchMeetingsList()).rejects.toThrow(PuntingformApiError);
+  });
+
+  it("maps raw API response to Meeting type", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () =>
+          Promise.resolve(
+            mockApiResponse([
+              {
+                meetingId: "237174",
+                track: {
+                  name: "Port Macquarie",
+                  trackId: "98",
+                  location: "C",
+                  state: "NSW",
+                  country: "AUS",
+                  abbrev: "P MQ",
+                  surface: "Turf",
+                },
+                meetingDate: "2026-02-08T00:00:00",
+                tabMeeting: true,
+                railPosition: "+3m Entire",
+                stage: "A",
+                isBarrierTrial: false,
+                isJumps: false,
+                formUpdated: "2026-02-08T11:07:47",
+              },
+            ])
+          ),
+      })
+    );
+
+    const result = await fetchMeetingsList("2026-02-08");
+
     expect(result).toEqual([
       {
-        meetingId: "m1",
-        meetingName: "Randwick",
-        location: "Sydney",
-        meetingDate: "2026-02-07",
-        raceType: "R",
+        meetingId: "237174",
+        meetingName: "Port Macquarie",
+        location: "NSW, AUS",
+        meetingDate: "2026-02-08T00:00:00",
+        raceType: "C",
         races: [],
       },
     ]);
