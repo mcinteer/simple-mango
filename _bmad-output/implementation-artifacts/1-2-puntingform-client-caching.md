@@ -1,6 +1,6 @@
 # Story 1.2: Puntingform Client & Caching
 
-Status: review
+Status: done
 
 ## Story
 
@@ -139,10 +139,10 @@ src/
 - ❌ Do NOT put feature hooks in `/hooks/` — this story has no client components
 
 ### Testing Approach
-- Manual testing acceptable (per Story 1.1 precedent)
-- Test cache miss → API call → cache hit flow manually via browser/curl
-- Test error handling by temporarily using wrong API key
-- Verify auth protection by calling without session
+- Unit tests via Vitest (`vitest.config.ts` at repo root)
+- Co-located tests (`*.test.ts` next to source files)
+- Mocking for external dependencies (MongoDB, Puntingform API)
+- API route tests verify auth and response shapes
 
 ### References
 - [Source: _bmad-output/planning-artifacts/architecture.md#Data Architecture — Caching Strategy]
@@ -168,16 +168,24 @@ None — clean implementation, no issues.
 - Task 3: Created `src/lib/db/racing-context.ts` with `getCachedMeetings(date)` and `saveMeetingsCache(date, data)`. Uses `racingContext` collection via `getDb()`. TTL check: 1 hour (3600000ms). Returns stale flag for graceful degradation. Created `src/lib/puntingform/cache.ts` orchestrating cache-first strategy: fresh cache → API fetch + save → stale fallback → throw.
 - Task 4: Created `src/app/api/race-cards/route.ts` GET handler. Auth via `getServerSession(authOptions)` → 401. Uses `getMeetingsWithCache(date)`. Returns standardised `{ data, meta }` on success, `{ error: { code: "UPSTREAM_ERROR" } }` with 502 on failure. Stale data returned with `meta.stale: true`.
 - All TypeScript compiles cleanly (`tsc --noEmit` passes).
-- No test framework configured; manual testing per Story 1.1 precedent.
+- Vitest configured with 21 tests across 5 test files — all passing.
+- Tests cover: Puntingform client, cache orchestration, DB operations, error utilities, API route.
 
 ### Change Log
 - 2026-02-07: Implemented all 5 tasks for Story 1.2 — Puntingform client, MongoDB caching layer, race-cards API route, error utilities, and type definitions.
+- 2026-02-08: Code review fixes — (1) Fixed cache.ts to pass date param to fetchMeetingsList, (2) Added route.test.ts for API auth/response testing, (3) Updated File List with all test files.
 
 ### File List
 - `src/types/race.ts` (NEW)
 - `src/lib/puntingform/types.ts` (NEW)
 - `src/lib/puntingform/client.ts` (NEW)
-- `src/lib/puntingform/cache.ts` (NEW)
+- `src/lib/puntingform/client.test.ts` (NEW)
+- `src/lib/puntingform/cache.ts` (NEW — fixed: date param now passed to fetchMeetingsList)
+- `src/lib/puntingform/cache.test.ts` (NEW)
 - `src/lib/db/racing-context.ts` (NEW)
+- `src/lib/db/racing-context.test.ts` (NEW)
 - `src/lib/utils/errors.ts` (NEW)
+- `src/lib/utils/errors.test.ts` (NEW)
 - `src/app/api/race-cards/route.ts` (NEW)
+- `src/app/api/race-cards/route.test.ts` (NEW)
+- `vitest.config.ts` (NEW)

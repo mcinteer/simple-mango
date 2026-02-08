@@ -46,7 +46,7 @@ describe("getMeetingsWithCache", () => {
 
     const result = await getMeetingsWithCache(DATE);
 
-    expect(fetchMeetingsList).toHaveBeenCalled();
+    expect(fetchMeetingsList).toHaveBeenCalledWith(DATE);
     expect(saveMeetingsCache).toHaveBeenCalledWith(DATE, MEETINGS);
     expect(result.cached).toBe(false);
   });
@@ -58,6 +58,7 @@ describe("getMeetingsWithCache", () => {
 
     const result = await getMeetingsWithCache(DATE);
 
+    expect(fetchMeetingsList).toHaveBeenCalledWith(DATE);
     expect(result.cached).toBe(false);
     expect(result.data).toEqual(MEETINGS);
   });

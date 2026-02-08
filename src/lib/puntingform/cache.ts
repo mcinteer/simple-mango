@@ -31,7 +31,7 @@ export async function getMeetingsWithCache(
 
   // Cache miss or stale — try API
   try {
-    const data = await fetchMeetingsList();
+    const data = await fetchMeetingsList(date);
     await saveMeetingsCache(date, data);
 
     return {
