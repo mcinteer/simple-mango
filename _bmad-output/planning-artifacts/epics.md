@@ -167,6 +167,21 @@ So that I know the current market price.
 **And** if the fetch fails, it silently retries without breaking the UI
 **And** if the race is "Closed" or "Jumped", polling stops
 
+### Story 1.6: Theme Toggle (Light/Dark Mode)
+
+As a user,
+I want to switch between light and dark themes,
+So that I can use the app comfortably in different lighting conditions.
+
+**Acceptance Criteria:**
+
+**Given** the user is on any page
+**When** they click the theme toggle
+**Then** the UI switches between light and dark mode immediately
+**And** their preference is persisted in localStorage
+**And** the default theme is dark ("Tuxedo" aesthetic)
+**And** the toggle is accessible (keyboard navigable, proper ARIA labels)
+
 ## Epic 2: The AI Wingman
 
 Activate the "Coach" — the conversational interface that turns data into insights.
