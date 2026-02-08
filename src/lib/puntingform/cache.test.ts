@@ -15,7 +15,7 @@ import { getCachedMeetings, saveMeetingsCache } from "@/lib/db/racing-context";
 import { fetchMeetingsList } from "./client";
 
 const DATE = "2026-02-07";
-const MEETINGS = [{ meetingId: "m1", meetingName: "Test", location: "X", meetingDate: DATE, raceType: "R", races: [] }];
+const MEETINGS = [{ meetingId: "m1", trackName: "Test", state: "VIC", meetingDate: DATE, raceType: "R", races: [] }];
 
 describe("getMeetingsWithCache", () => {
   beforeEach(() => {

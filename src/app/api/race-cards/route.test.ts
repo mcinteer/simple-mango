@@ -18,7 +18,7 @@ import { getServerSession } from "next-auth";
 import { getMeetingsWithCache } from "@/lib/puntingform/cache";
 
 const MEETINGS = [
-  { meetingId: "m1", meetingName: "Test", location: "X", meetingDate: "2026-02-08", raceType: "R", races: [] },
+  { meetingId: "m1", trackName: "Test", state: "VIC", meetingDate: "2026-02-08", raceType: "R", races: [] },
 ];
 
 describe("GET /api/race-cards", () => {

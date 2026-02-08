@@ -29,8 +29,8 @@ export interface Race {
 
 export interface Meeting {
   meetingId: string;
-  meetingName: string;
-  location: string;
+  trackName: string;
+  state: string;
   meetingDate: string;
   raceType: string;
   races: Race[];

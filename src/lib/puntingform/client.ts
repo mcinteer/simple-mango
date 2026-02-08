@@ -64,8 +64,8 @@ export async function fetchMeetingsList(date?: string): Promise<Meeting[]> {
   // Map raw API shape to internal Meeting type (without race detail for now)
   return items.map((item) => ({
     meetingId: item.meetingId,
-    meetingName: item.track.name,
-    location: `${item.track.state}, ${item.track.country}`,
+    trackName: item.track.name,
+    state: item.track.state,
     meetingDate: item.meetingDate,
     raceType: item.track.location,
     races: [],

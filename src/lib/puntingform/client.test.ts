@@ -123,8 +123,8 @@ describe("Puntingform client", () => {
     expect(result).toEqual([
       {
         meetingId: "237174",
-        meetingName: "Port Macquarie",
-        location: "NSW, AUS",
+        trackName: "Port Macquarie",
+        state: "NSW",
         meetingDate: "2026-02-08T00:00:00",
         raceType: "C",
         races: [],
